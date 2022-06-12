@@ -93,22 +93,34 @@ function App() {
       </div>
       <div className="chaucay">
         <button onClick={getChaucay}>Hiển thị Phiếu nhập </button>
-
-        {chaucayList.map((val, key) => {
-          return (
-            <div className="chaucay1">
-              <div>
-                <h3>Mã phiếu: {val.maphieu}</h3>
-                <h3>Mã hàng: {val.mahang}</h3>
-                <h3>Ngày nhập: {val.ngaynhap}</h3>
-                <h3>Số lượng nhập: {val.soluongnhap}</h3>
-                <h3>Nhà cung cấp: {val.nhacungcap}</h3>
-                <h3>Ghi chú: {val.ghichu}</h3>
-              </div>
-              
-            </div>
+          <table className="table">
+          <thead>
+            <tr>
+              <th>Ma phieu</th>
+              <th>Ma hang</th>
+              <th>Ngay nhap</th>
+              <th>So luong nhap</th>
+              <th>Nha cung cap</th>
+              <th>Ghi chu</th>
+            </tr>
+          </thead>
+          <tbody>
+             {chaucayList.map((val, key) => {
+               return (
+                 <tr>
+                   <td> {val.maphieu} </td>
+                   <td> {val.mahang} </td>
+                   <td> {val.ngaynhap} </td>
+                   <td> {val.soluongnhap} </td>
+                   <td> {val.nhacungcap} </td>
+                   <td> {val.ghichu} </td>
+                
+                </tr>   
           );
-        })}
+        }
+        )}
+        </tbody>
+        </table>
       </div>
     </div>
   );
