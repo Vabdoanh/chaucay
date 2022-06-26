@@ -1,4 +1,3 @@
-
 import "./App.css";
 import { useState } from "react";
 import Axios from "axios";
@@ -10,10 +9,8 @@ function App() {
   const [soluongnhap, setSoluongnhap] = useState("");
   const [nhacungcap, setNhacungcap] = useState("");
   const [ghichu, setGhichu]         = useState("")
-
   const [chaucayList, setChaucayList] = useState([]);
-
-  
+  const [showTable, setShowTable] = useState(false);
 
   const addChaucay = () => {
     Axios.post("http://localhost:3001/create", {
@@ -37,12 +34,18 @@ function App() {
       ]);
     });
   };
+  
+
+  
   const getChaucay = () => {
     Axios.get("http://localhost:3001/phieunhap").then((response) => {
       setChaucayList(response.data);
     });
   };
-
+  const handleOnClick = async () => {
+    await getChaucay();        
+    setShowTable(!showTable);    
+  }
   return (
     <div className="App">
       <div className="information">
@@ -62,7 +65,7 @@ function App() {
         />
         <label>Ngày nhập </label>
         <input
-          type="text"
+          type="date"
           onChange={(event) => {
             setSoluongnhap(event.target.value);
           }}
@@ -92,10 +95,13 @@ function App() {
         
       </div>
       <div className="chaucay">
-        <button onClick={getChaucay}>Hiển thị Phiếu nhập </button>
-          <table className="table">
+        <button onClick={handleOnClick}>{showTable==true ? "Ẩn phiếu nhập" : "Hiển thị phiếu nhập" }</button>
+          {
+            showTable==true ? (
+            <table className="table">
           <thead>
             <tr>
+              <th>STT</th>
               <th>Ma phieu</th>
               <th>Ma hang</th>
               <th>Ngay nhap</th>
@@ -108,6 +114,7 @@ function App() {
              {chaucayList.map((val, key) => {
                return (
                  <tr>
+                  <td> {key+1} </td>
                    <td> {val.maphieu} </td>
                    <td> {val.mahang} </td>
                    <td> {val.ngaynhap} </td>
@@ -121,6 +128,9 @@ function App() {
         )}
         </tbody>
         </table>
+            ) : <div></div>
+          }
+          
       </div>
     </div>
   );
