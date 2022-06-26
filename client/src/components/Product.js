@@ -9,7 +9,7 @@ const Product = () => {
   const [name,setName ] =useState('');
   
   useEffect(() =>{
-
+    
   }, []);
 
   useEffect(() =>{
