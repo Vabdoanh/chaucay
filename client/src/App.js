@@ -1,6 +1,5 @@
 import "./App.css";
-import { useState } from "react";
-import Axios from "axios";
+
 import FormInput from "./components/FormInput";
 import Header from "./components/Header";
 import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
@@ -11,12 +10,12 @@ function App() {
   return (
     // <div className="App">
     <>
-      
       <Header />
       <Router>
         <Routes>
-          <Route path= '/' element= {<FormInput />} /> 
-          <Route path= '/products' element= {<Product />} /> 
+          <Route path= '/forminput' element= {<FormInput />} /> 
+          <Route path= '/' element= {<Product />} />
+
         </Routes>
       </Router>
     </>
@@ -25,3 +24,4 @@ function App() {
 }
 
 export default App;
+
