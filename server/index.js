@@ -23,7 +23,7 @@ app.post("/create", (req, res) => {
   const ghichu =req.body.ghichu;
  
   db.query(
-    "INSERT INTO phieunhap (mahang, maphieu, ngaynhap, soluongnhap, nhacungcap, ghichu) VALUES (?,?,?,?,?,?)",
+    "INSERT INTO phieunhap (maphieu,mahang, ngaynhap, soluongnhap, nhacungcap, ghichu) VALUES (?,?,?,?,?,?)",
     [maphieu, mahang, ngaynhap, soluongnhap, nhacungcap, ghichu],
     (err, result) => {
       if (err) {
@@ -44,8 +44,43 @@ app.get("/phieunhap", (req, res) => {
     }
   });
 });
+app.get("/nhacungcap", (req, res) => {
+  db.query("SELECT * FROM nhacungcap", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 
-
+app.get("/hanghoa", (req, res) => {
+  db.query("SELECT * FROM hanghoa", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 app.listen(3001, () => {
   console.log("Yey, your server is running on port 3001");
+});
+
+app.post("/search", (req, res) => {
+  const mahang = req.body.mahang ?? '';
+  const tenhang = req.body.tenhang ?? '';
+  const manhomhang = req.body.manhomhang ?? '';
+ 
+  db.query(
+    "Select * from hanghoa where mahang like concat('%', ?, '%') and  tenhang like concat('%', ?, '%') and manhomhang like concat('%', ?, '%')",
+    [mahang, tenhang, manhomhang],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
 });
