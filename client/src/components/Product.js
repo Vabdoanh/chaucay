@@ -1,42 +1,53 @@
-import React, {useState, useEffect} from 'react'
-import { Button } from 'react-bootstrap';
-import { Form } from 'react-bootstrap';
-import { Row,Col } from 'react-bootstrap';
-import Item from './Item';
+import React, { useState, useEffect } from 'react';
+import Posts from './Posts';
+import Pagination from './Pagination';
+import axios from 'axios';
 
 const Product = () => {
-  const [products,setProducts] = useState([]);
-  const [name,setName ] =useState('');
-  
-  useEffect(() =>{
-    
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(10);
+  const [q ,setQ] = useState('');
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      const res = await axios.get('http://localhost:3001/hanghoa');
+      setPosts(res.data);
+      setLoading(false);
+    };
+
+    fetchPosts();
   }, []);
 
-  useEffect(() =>{
-    
-  }, [name]);
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
+  // Change page
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+  function search(rows) {
+    return rows.filter(row => row.mahang.toLowerCase().indexOf(q) > -1 || row.tenhang.toLowerCase().indexOf(q) > -1 )
+  }
   return (
-    <div>
-        <Form.Group style={{width: '300px'}} className="mb-2" controlId="exampleForm.ControlInput1">
-        <Form.Label>Name product:</Form.Label>
-        <Form.Control 
-            type="name" 
-            placeholder="may hut bui..." 
-            onChange={(e) => setName(e.target.value)}
-        />
-        </Form.Group>
-        <Row xs={1} md={4} className="g-4">
-            {
-                products.map((product,index) =>(
-                    <Col>
-                        <Item key={index} product={product} />
-                    </Col>
-                ))
-            }
-        </Row>
+    <div className='container mt-0' >
+      <h1 className='text-primary mb-3'>Kho sản phẩm</h1>
+      <div style={{margintop:'25px'}}> 
+            <input type = "text" placeholder='Search...' value = {q} onChange={(e) => setQ(e.target.value)} style={{float:'right'}} />
+      </div>
+      <br/><br/><br/>
+      <div className='body' style={{padding:"3px", boder:"box"}}>
+      <Posts posts={search(currentPosts)} loading={loading} />
+      <Pagination
+        postsPerPage={postsPerPage}
+        totalPosts={posts.length}
+        paginate={paginate}
+      />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Product
+export default Product;
